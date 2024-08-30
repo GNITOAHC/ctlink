@@ -87,7 +87,7 @@ const Checkout = ({ amount, username }: CheckoutProps) => {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="rounded-md bg-white p-2">
+    <form onSubmit={handleSubmit} className="rounded-md bg-white p-8">
       {clientSecret && <PaymentElement />}
 
       {errorMsg && <div className="text-red-500">{errorMsg}</div>}
