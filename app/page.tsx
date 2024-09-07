@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { HealthCheckService } from "@/services";
 
 import { Button } from "@/components/ui/button";
+import HealthCheckButton from "./components/HealthCheckButton";
 
 const links = [
   {
@@ -27,9 +27,6 @@ const links = [
 ];
 
 export default async function Home() {
-  const health = await HealthCheckService.health();
-  console.log(health);
-
   return (
     <main className="min-h-[80dvh] items-center space-y-4 p-24">
       <h1>HomePage</h1>
@@ -40,6 +37,7 @@ export default async function Home() {
           </Button>
         ))}
       </nav>
+      <HealthCheckButton />
     </main>
   );
 }
