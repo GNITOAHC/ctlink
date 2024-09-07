@@ -20,7 +20,7 @@ class AuthService {
         cache: "no-store",
       });
 
-      return await res.text();
+      return res;
     } catch (error) {
       return error;
     }
@@ -37,7 +37,7 @@ class AuthService {
         cache: "no-store",
       });
 
-      return await res.text();
+      return res;
     } catch (error) {
       return error;
     }
