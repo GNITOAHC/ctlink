@@ -7,9 +7,14 @@ class HealthCheckService {
         method: "GET",
         cache: "no-store",
       });
-      return await res.text();
+
+      if (res.ok) {
+        return await res.text();
+      }
+
+      return "Not Alive";
     } catch (error) {
-      return error;
+      return "Not Alive";
     }
   }
 }
