@@ -16,23 +16,12 @@ import { Input } from "@/components/ui/input";
 
 import OTPForm from "./OTPForm";
 
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
 import { AuthService } from "@/services";
 
-const registerSchema = z
-  .object({
-    username: z.string().min(2).max(50),
-    mail: z.string().email(),
-  })
-  .refine((data) => data.username[0] !== "_", {
-    message: "username should not start with '_'",
-    path: ["username"],
-  });
-
-type RegisterSchema = z.infer<typeof registerSchema>;
+import { registerSchema, type RegisterSchema } from "@/types/Register";
 
 const RegisterForm = () => {
   const [showOTP, setShowOTP] = useState(false);
