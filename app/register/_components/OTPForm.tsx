@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -18,29 +19,21 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
 import { AuthService } from "@/services";
-import { redirect } from "next/navigation";
 
-const otpSchema = z.object({
-  otp: z.string().min(6, {
-    message: "Your one-time password must be 6 characters.",
-  }),
-});
-
-type OTPSchema = z.infer<typeof otpSchema>;
+import { otpSchema } from "@/types/Register";
+import type { OTPSchema, RegisterSchema } from "@/types/Register";
 
 type OTPFormProps = {
-  userData: {
-    username: string;
-    mail: string;
-  };
+  userData: RegisterSchema;
 };
 
 const OTPForm = ({ userData }: OTPFormProps) => {
+  const router = useRouter();
+
   const [error, setError] = useState("");
 
   const form = useForm<OTPSchema>({
@@ -57,7 +50,7 @@ const OTPForm = ({ userData }: OTPFormProps) => {
 
     if (res.ok) {
       setError("");
-      redirect("/");
+      router.push("/login");
     } else {
       setError(await res.text());
     }
