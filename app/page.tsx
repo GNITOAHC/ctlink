@@ -1,5 +1,8 @@
 import Link from "next/link";
 
+import { Button } from "@/components/ui/button";
+import HealthCheckButton from "./components/HealthCheckButton";
+
 const links = [
   {
     href: "/login",
@@ -23,21 +26,18 @@ const links = [
   },
 ];
 
-export default function Home() {
+export default async function Home() {
   return (
     <main className="min-h-[80dvh] items-center space-y-4 p-24">
       <h1>HomePage</h1>
       <nav className="grid grid-cols-4 gap-4">
         {links.map(({ href, title }) => (
-          <Link
-            key={title}
-            href={href}
-            className="block border-2 border-foreground p-2 text-center hover:bg-foreground hover:text-background"
-          >
-            {title}
-          </Link>
+          <Button key={title} asChild>
+            <Link href={href}>{title}</Link>
+          </Button>
         ))}
       </nav>
+      <HealthCheckButton />
     </main>
   );
 }
