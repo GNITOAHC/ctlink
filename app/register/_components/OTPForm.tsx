@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
@@ -40,10 +40,16 @@ const OTPForm = ({ userData }: OTPFormProps) => {
     resolver: zodResolver(otpSchema),
   });
 
+  const {
+    control,
+    handleSubmit,
+    formState: { isSubmitting },
+  } = form;
+
   const onSubmit = async (data: OTPSchema) => {
     console.log(data);
 
-    const res = (await AuthService.verify({
+    const res = (await AuthService.verifyRegister({
       ...userData,
       ...data,
     })) as unknown as Response;
@@ -58,9 +64,9 @@ const OTPForm = ({ userData }: OTPFormProps) => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <FormField
-          control={form.control}
+          control={control}
           name="otp"
           render={({ field }) => (
             <FormItem>
@@ -84,9 +90,11 @@ const OTPForm = ({ userData }: OTPFormProps) => {
             </FormItem>
           )}
         />
-        <div className="space-x-4">
-          <Button type="submit">Submit</Button>
-          {error && <span className="text-destructive">{error}</span>}
+        <div className="space-y-2">
+          <Button type="submit" disabled={isSubmitting} className="w-full">
+            {isSubmitting ? "Wait ..." : "Register"}
+          </Button>
+          {error && <p className="text-center text-destructive">{error}</p>}
         </div>
       </form>
     </Form>

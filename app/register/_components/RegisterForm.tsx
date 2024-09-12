@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -32,6 +32,8 @@ const RegisterForm = () => {
   });
 
   const {
+    control,
+    handleSubmit,
     getValues,
     formState: { isSubmitting },
   } = form;
@@ -55,14 +57,11 @@ const RegisterForm = () => {
   };
 
   return (
-    <>
+    <div className="space-y-4">
       <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="w-2/3 space-y-6"
-        >
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <FormField
-            control={form.control}
+            control={control}
             name="username"
             render={({ field }) => (
               <FormItem>
@@ -78,7 +77,7 @@ const RegisterForm = () => {
             )}
           />
           <FormField
-            control={form.control}
+            control={control}
             name="mail"
             render={({ field }) => (
               <FormItem>
@@ -92,8 +91,8 @@ const RegisterForm = () => {
             )}
           />
           <div className="space-x-4">
-            <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? "Submitting ..." : "Submit"}
+            <Button type="submit" className="w-full" disabled={isSubmitting}>
+              {isSubmitting ? "Sending OTP" : "Send OTP"}
             </Button>
             {error && <span className="text-destructive">{error}</span>}
           </div>
@@ -101,7 +100,7 @@ const RegisterForm = () => {
       </Form>
 
       {showOTP && !error && <OTPForm userData={getValues()} />}
-    </>
+    </div>
   );
 };
 
