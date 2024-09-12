@@ -23,7 +23,7 @@ const Payment = ({ params }: PaymentProps) => {
   return (
     <div className="space-y-4 px-16 py-8">
       <Link
-        href={`/${username}`}
+        href="/profile"
         className="block w-fit border-2 border-foreground p-2 hover:bg-foreground hover:text-background"
       >
         {"<"} Back
