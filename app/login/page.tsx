@@ -11,8 +11,6 @@ import {
 import { LoginForm } from "./_components";
 
 const Login = () => {
-  // return <LoginForm />;
-
   return (
     <Card className="mx-auto max-w-sm">
       <CardHeader>

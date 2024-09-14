@@ -26,8 +26,6 @@ import { AuthService } from "@/services";
 import { otpSchema } from "@/types/Login";
 import type { OTPSchema, LoginSchema } from "@/types/Login";
 
-import { setCookie } from "cookies-next";
-
 type OTPFormProps = {
   userData: LoginSchema;
 };
@@ -49,11 +47,8 @@ const OTPForm = ({ userData }: OTPFormProps) => {
 
     if (res.ok) {
       setError("");
-      const parsedRes = await res.json();
-      console.log(parsedRes);
-      setCookie("refreshToken", parsedRes.refreshToken);
-      setCookie("username", parsedRes.username);
-      setCookie("mail", parsedRes.mail);
+      // const parsedRes = await res.json();
+      // console.log(parsedRes);
       router.push("/profile");
     } else {
       setError(await res.text());
