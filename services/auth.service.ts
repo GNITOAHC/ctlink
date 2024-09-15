@@ -22,7 +22,6 @@ class AuthService {
         headers: {
           "Content-Type": "application/json",
         },
-        cache: "no-store",
       });
 
       return res;
@@ -39,7 +38,6 @@ class AuthService {
         headers: {
           "Content-Type": "application/json",
         },
-        cache: "no-store",
       });
 
       return res;
