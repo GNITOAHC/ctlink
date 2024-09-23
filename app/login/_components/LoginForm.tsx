@@ -25,7 +25,6 @@ import OTPForm from "./OTPForm";
 
 export default function LoginForm() {
   const [error, setError] = useState("");
-  const [showOTP, setShowOTP] = useState(false);
 
   const form = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
@@ -35,7 +34,7 @@ export default function LoginForm() {
     handleSubmit,
     getValues,
     control,
-    formState: { isSubmitting },
+    formState: { isSubmitting, isSubmitSuccessful },
   } = form;
 
   const onSubmit = async (values: LoginSchema) => {
@@ -48,7 +47,6 @@ export default function LoginForm() {
     const res = (await AuthService.login({ mail })) as unknown as Response;
 
     if (res.ok) {
-      setShowOTP(true);
       setError("");
     } else {
       setError(await res.text());
@@ -80,7 +78,7 @@ export default function LoginForm() {
         </form>
       </Form>
 
-      {showOTP && !error && <OTPForm userData={getValues()} />}
+      {isSubmitSuccessful && !error && <OTPForm userData={getValues()} />}
     </div>
   );
 }

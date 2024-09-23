@@ -24,7 +24,6 @@ import { AuthService } from "@/services";
 import { registerSchema, type RegisterSchema } from "@/types/Register";
 
 const RegisterForm = () => {
-  const [showOTP, setShowOTP] = useState(false);
   const [error, setError] = useState("");
 
   const form = useForm<RegisterSchema>({
@@ -35,7 +34,7 @@ const RegisterForm = () => {
     control,
     handleSubmit,
     getValues,
-    formState: { isSubmitting },
+    formState: { isSubmitting, isSubmitSuccessful },
   } = form;
 
   const onSubmit = async (data: RegisterSchema) => {
@@ -49,7 +48,6 @@ const RegisterForm = () => {
     console.log(res);
 
     if (res.ok) {
-      setShowOTP(true);
       setError("");
     } else {
       setError(await res.text());
@@ -99,7 +97,7 @@ const RegisterForm = () => {
         </form>
       </Form>
 
-      {showOTP && !error && <OTPForm userData={getValues()} />}
+      {isSubmitSuccessful && !error && <OTPForm userData={getValues()} />}
     </div>
   );
 };
