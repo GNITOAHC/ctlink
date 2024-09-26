@@ -19,16 +19,15 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 import { AuthService } from "@/services";
-
-import { otpSchema } from "@/types/Register";
-import type { OTPSchema, RegisterSchema } from "@/types/Register";
+import { otpSchema } from "@/types/Login";
+import type { OTPSchema, LoginSchema } from "@/types/Login";
 
 type OTPFormProps = {
-  userData: RegisterSchema;
+  userData: LoginSchema;
 };
 
 const OTPForm = ({ userData }: OTPFormProps) => {
@@ -40,23 +39,17 @@ const OTPForm = ({ userData }: OTPFormProps) => {
     resolver: zodResolver(otpSchema),
   });
 
-  const {
-    control,
-    handleSubmit,
-    formState: { isSubmitting },
-  } = form;
-
-  const onSubmit = async (data: OTPSchema) => {
-    console.log(data);
-
-    const res = (await AuthService.verifyRegister({
+  const onSubmit = async (values: OTPSchema) => {
+    const res = (await AuthService.verifyLogin({
       ...userData,
-      ...data,
+      ...values,
     })) as unknown as Response;
 
     if (res.ok) {
       setError("");
-      router.push("/login");
+      // const parsedRes = await res.json();
+      // console.log(parsedRes);
+      router.push("/profile");
     } else {
       setError(await res.text());
     }
@@ -64,9 +57,9 @@ const OTPForm = ({ userData }: OTPFormProps) => {
 
   return (
     <Form {...form}>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <FormField
-          control={control}
+          control={form.control}
           name="otp"
           render={({ field }) => (
             <FormItem>
@@ -84,15 +77,15 @@ const OTPForm = ({ userData }: OTPFormProps) => {
                 </InputOTP>
               </FormControl>
               <FormDescription>
-                Please enter the one-time password sent to your phone.
+                Please enter the one-time password sent to your email.
               </FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
         <div className="space-y-2">
-          <Button type="submit" disabled={isSubmitting} className="w-full">
-            {isSubmitting ? "Wait ..." : "Register"}
+          <Button type="submit" className="w-full">
+            Submit
           </Button>
           {error && <p className="text-center text-destructive">{error}</p>}
         </div>

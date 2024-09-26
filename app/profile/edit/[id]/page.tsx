@@ -6,12 +6,12 @@ type EditIdProps = {
 };
 
 const EditId = ({ params }: EditIdProps) => {
-  const { id, username } = params;
+  const { id } = params;
 
   return (
     <section className="space-y-4 px-16 py-8">
       <Link
-        href={`/${username}/edit`}
+        href="/profile/edit"
         className="block w-fit border-2 border-foreground p-2 hover:bg-foreground hover:text-background"
       >
         {"<"} Back

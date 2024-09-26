@@ -1,28 +1,26 @@
 import Link from "next/link";
 
-type UsernameProps = {
-  params: { username: string };
-};
+import LogoutButton from "./LogoutButton";
 
-const Username = ({ params }: UsernameProps) => {
-  const { username } = params;
-
+const Profile = () => {
   return (
     <section className="grid grid-cols-4 gap-4 px-20 py-8">
       <Link
-        href={`/${username}/edit`}
+        href="profile/edit"
         className="border-2 border-foreground p-2 text-center hover:bg-foreground hover:text-background"
       >
         Edit
       </Link>
       <Link
-        href={`/${username}/payment`}
+        href="/profile/payment"
         className="border-2 border-foreground p-2 text-center hover:bg-foreground hover:text-background"
       >
         Payment
       </Link>
+
+      <LogoutButton />
     </section>
   );
 };
 
-export default Username;
+export default Profile;

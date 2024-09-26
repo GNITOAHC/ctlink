@@ -10,17 +10,11 @@ const editList = [
   { id: 6, title: 6 },
 ];
 
-type EditProps = {
-  params: { username: string };
-};
-
-const Edit = ({ params }: EditProps) => {
-  const { username } = params;
-
+const Edit = () => {
   return (
     <div className="space-y-4 px-16 py-8">
       <Link
-        href={`/${username}`}
+        href="/profile"
         className="block w-fit border-2 border-foreground p-2 hover:bg-foreground hover:text-background"
       >
         {"<"} Back
@@ -29,7 +23,7 @@ const Edit = ({ params }: EditProps) => {
         {editList.map(({ id, title }) => (
           <Link
             key={id}
-            href={`/${username}/edit/${id}`}
+            href={`/profile/edit/${id}`}
             className="border-2 border-foreground p-2 text-center hover:bg-foreground hover:text-background"
           >
             {title}

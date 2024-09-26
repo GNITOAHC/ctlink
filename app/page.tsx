@@ -17,12 +17,12 @@ const links = [
     title: "Pricing",
   },
   {
-    href: "/john",
-    title: "Username",
+    href: "/profile",
+    title: "Profile",
   },
   {
-    href: "/_01jj0dj",
-    title: "Redirect",
+    href: "/john/_jx102983",
+    title: "Shortened URL",
   },
 ];
 

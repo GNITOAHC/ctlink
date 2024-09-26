@@ -1,23 +1,27 @@
 import { BACKEND_URL } from "@/constants";
 
-type RegisterBody = { mail: string };
+type SendOTPBody = { mail: string };
 
-type VerifyBody = {
+type VerifyLoginBody = {
   mail: string;
   otp: string;
+};
+
+type VerifyRegisterBody = VerifyLoginBody & {
   username: string;
 };
 
+type VerifyBody = VerifyLoginBody | VerifyRegisterBody;
+
 class AuthService {
-  async register(body: RegisterBody) {
+  async sendOTP(body: SendOTPBody, pathname: string) {
     try {
-      const res = await fetch(`${BACKEND_URL}/register`, {
+      const res = await fetch(`${BACKEND_URL}/${pathname}`, {
         method: "POST",
         body: JSON.stringify(body),
         headers: {
           "Content-Type": "application/json",
         },
-        cache: "no-store",
       });
 
       return res;
@@ -26,21 +30,36 @@ class AuthService {
     }
   }
 
-  async verify(body: VerifyBody) {
+  async verifyOTP(body: VerifyBody, pathname: string) {
     try {
-      const res = await fetch(`${BACKEND_URL}/register/verify`, {
+      const res = await fetch(`${BACKEND_URL}/${pathname}/verify`, {
         method: "POST",
         body: JSON.stringify(body),
         headers: {
           "Content-Type": "application/json",
         },
-        cache: "no-store",
       });
 
       return res;
     } catch (error) {
       return error;
     }
+  }
+
+  async register(body: SendOTPBody) {
+    return await this.sendOTP(body, "register");
+  }
+
+  async login(body: SendOTPBody) {
+    return await this.sendOTP(body, "login");
+  }
+
+  async verifyRegister(body: VerifyRegisterBody) {
+    return await this.verifyOTP(body, "register");
+  }
+
+  async verifyLogin(body: VerifyLoginBody) {
+    return await this.verifyOTP(body, "login");
   }
 }
 
