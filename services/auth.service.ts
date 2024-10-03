@@ -13,6 +13,8 @@ type VerifyRegisterBody = VerifyLoginBody & {
 
 type VerifyBody = VerifyLoginBody | VerifyRegisterBody;
 
+type DeleteBody = { mail: string };
+
 class AuthService {
   async sendOTP(body: SendOTPBody, pathname: string) {
     try {
@@ -60,6 +62,22 @@ class AuthService {
 
   async verifyLogin(body: VerifyLoginBody) {
     return await this.verifyOTP(body, "login");
+  }
+
+  async delete(body: DeleteBody) {
+    try {
+      const res = await fetch(`${BACKEND_URL}/test-delete`, {
+        method: "POST",
+        body: JSON.stringify(body),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      return res;
+    } catch (error) {
+      return error;
+    }
   }
 }
 
