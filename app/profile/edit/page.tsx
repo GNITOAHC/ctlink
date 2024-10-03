@@ -1,7 +1,16 @@
 import React from "react";
 import Link from "next/link";
 
-const editList = [
+import { ShortenUrlForm } from "./_components";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from "@/components/ui/card";
+
+const urlList = [
   { id: 1, title: 1 },
   { id: 2, title: 2 },
   { id: 3, title: 3 },
@@ -12,15 +21,26 @@ const editList = [
 
 const Edit = () => {
   return (
-    <div className="space-y-4 px-16 py-8">
+    <div className="space-y-4 px-4 py-8 md:px-16">
       <Link
         href="/profile"
         className="block w-fit border-2 border-foreground p-2 hover:bg-foreground hover:text-background"
       >
         {"<"} Back
       </Link>
+
+      <Card className="mx-auto max-w-sm sm:max-w-md">
+        <CardHeader>
+          <CardTitle className="text-2xl">Shorten URL</CardTitle>
+          <CardDescription>Enter your URL below to shorten it</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ShortenUrlForm />
+        </CardContent>
+      </Card>
+
       <section className="grid grid-cols-3 gap-4">
-        {editList.map(({ id, title }) => (
+        {urlList.map(({ id, title }) => (
           <Link
             key={id}
             href={`/profile/edit/${id}`}
