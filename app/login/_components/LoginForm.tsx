@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-
 import { Button } from "@/components/ui/button";
 
 import {
@@ -24,8 +22,6 @@ import { loginSchema, type LoginSchema } from "@/types/Login";
 import OTPForm from "./OTPForm";
 
 export default function LoginForm() {
-  const [error, setError] = useState("");
-
   const form = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
   });
@@ -34,7 +30,8 @@ export default function LoginForm() {
     handleSubmit,
     getValues,
     control,
-    formState: { isSubmitting, isSubmitSuccessful },
+    formState: { isSubmitting, isSubmitSuccessful, errors },
+    setError,
   } = form;
 
   const onSubmit = async (values: LoginSchema) => {
@@ -46,10 +43,10 @@ export default function LoginForm() {
 
     const res = (await AuthService.login({ mail })) as unknown as Response;
 
-    if (res.ok) {
-      setError("");
-    } else {
-      setError(await res.text());
+    if (!res.ok) {
+      setError("root", {
+        message: await res.text(),
+      });
     }
   };
 
@@ -74,11 +71,13 @@ export default function LoginForm() {
           <Button type="submit" className="w-full" disabled={isSubmitting}>
             {isSubmitting ? "Sending OTP" : "Send OTP"}
           </Button>
-          {error && <span className="text-destructive">{error}</span>}
+          {errors.root && (
+            <span className="text-destructive">{errors.root.message}</span>
+          )}
         </form>
       </Form>
 
-      {isSubmitSuccessful && !error && <OTPForm userData={getValues()} />}
+      {isSubmitSuccessful && <OTPForm userData={getValues()} />}
     </div>
   );
 }

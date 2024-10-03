@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -24,8 +22,6 @@ import { AuthService } from "@/services";
 import { registerSchema, type RegisterSchema } from "@/types/Register";
 
 const RegisterForm = () => {
-  const [error, setError] = useState("");
-
   const form = useForm<RegisterSchema>({
     resolver: zodResolver(registerSchema),
   });
@@ -34,7 +30,8 @@ const RegisterForm = () => {
     control,
     handleSubmit,
     getValues,
-    formState: { isSubmitting, isSubmitSuccessful },
+    formState: { isSubmitting, isSubmitSuccessful, errors },
+    setError,
   } = form;
 
   const onSubmit = async (data: RegisterSchema) => {
@@ -47,10 +44,10 @@ const RegisterForm = () => {
     const res = (await AuthService.register({ mail })) as unknown as Response;
     console.log(res);
 
-    if (res.ok) {
-      setError("");
-    } else {
-      setError(await res.text());
+    if (!res.ok) {
+      setError("root", {
+        message: await res.text(),
+      });
     }
   };
 
@@ -92,12 +89,14 @@ const RegisterForm = () => {
             <Button type="submit" className="w-full" disabled={isSubmitting}>
               {isSubmitting ? "Sending OTP" : "Send OTP"}
             </Button>
-            {error && <span className="text-destructive">{error}</span>}
+            {errors.root && (
+              <span className="text-destructive">{errors.root.message}</span>
+            )}
           </div>
         </form>
       </Form>
 
-      {isSubmitSuccessful && !error && <OTPForm userData={getValues()} />}
+      {isSubmitSuccessful && <OTPForm userData={getValues()} />}
     </div>
   );
 };

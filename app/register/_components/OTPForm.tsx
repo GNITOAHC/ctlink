@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
@@ -34,8 +33,6 @@ type OTPFormProps = {
 const OTPForm = ({ userData }: OTPFormProps) => {
   const router = useRouter();
 
-  const [error, setError] = useState("");
-
   const form = useForm<OTPSchema>({
     resolver: zodResolver(otpSchema),
   });
@@ -43,7 +40,8 @@ const OTPForm = ({ userData }: OTPFormProps) => {
   const {
     control,
     handleSubmit,
-    formState: { isSubmitting },
+    formState: { isSubmitting, errors },
+    setError,
   } = form;
 
   const onSubmit = async (data: OTPSchema) => {
@@ -55,10 +53,11 @@ const OTPForm = ({ userData }: OTPFormProps) => {
     })) as unknown as Response;
 
     if (res.ok) {
-      setError("");
       router.push("/login");
     } else {
-      setError(await res.text());
+      setError("root", {
+        message: await res.text(),
+      });
     }
   };
 
@@ -94,7 +93,11 @@ const OTPForm = ({ userData }: OTPFormProps) => {
           <Button type="submit" disabled={isSubmitting} className="w-full">
             {isSubmitting ? "Wait ..." : "Register"}
           </Button>
-          {error && <p className="text-center text-destructive">{error}</p>}
+          {errors.root && (
+            <p className="text-center text-destructive">
+              {errors.root.message}
+            </p>
+          )}
         </div>
       </form>
     </Form>

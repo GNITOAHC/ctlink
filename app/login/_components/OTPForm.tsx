@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
@@ -33,11 +32,16 @@ type OTPFormProps = {
 const OTPForm = ({ userData }: OTPFormProps) => {
   const router = useRouter();
 
-  const [error, setError] = useState("");
-
   const form = useForm<OTPSchema>({
     resolver: zodResolver(otpSchema),
   });
+
+  const {
+    handleSubmit,
+    control,
+    formState: { errors },
+    setError,
+  } = form;
 
   const onSubmit = async (values: OTPSchema) => {
     const res = (await AuthService.verifyLogin({
@@ -46,20 +50,21 @@ const OTPForm = ({ userData }: OTPFormProps) => {
     })) as unknown as Response;
 
     if (res.ok) {
-      setError("");
       // const parsedRes = await res.json();
       // console.log(parsedRes);
       router.push("/profile");
     } else {
-      setError(await res.text());
+      setError("root", {
+        message: await res.text(),
+      });
     }
   };
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <FormField
-          control={form.control}
+          control={control}
           name="otp"
           render={({ field }) => (
             <FormItem>
@@ -87,7 +92,11 @@ const OTPForm = ({ userData }: OTPFormProps) => {
           <Button type="submit" className="w-full">
             Submit
           </Button>
-          {error && <p className="text-center text-destructive">{error}</p>}
+          {errors.root && (
+            <p className="text-center text-destructive">
+              {errors.root.message}
+            </p>
+          )}
         </div>
       </form>
     </Form>
