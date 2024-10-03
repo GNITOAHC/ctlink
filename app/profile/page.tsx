@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import LogoutButton from "./LogoutButton";
+import { LogoutButton } from "./_components";
 
 const Profile = () => {
   return (
@@ -19,6 +19,7 @@ const Profile = () => {
       </Link>
 
       <LogoutButton />
+      {/* <DeleteUserButton /> */}
     </section>
   );
 };
